@@ -57,19 +57,3 @@ jobs:
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
-
-  deploy:
-    name: Deploy
-    if: github.ref == 'refs/heads/master'
-    needs: build
-    concurrency: deploy
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Deploy infrastructure changes and app
-        working-directory: infrastructure
-        run: |
-          terraform init
-          terraform apply -auto-approve
