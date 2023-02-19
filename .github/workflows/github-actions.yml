@@ -40,3 +40,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ TERRAFORM_VERSION }}
+
+      - run: terraform init
+
+      - run: terraform fmt -check
+
+      - run: terraform validate
