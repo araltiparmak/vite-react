@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 env:
   NODE_VERSION: 18
+  TERRAFORM_VERSION: 1.3.9
 
 jobs:
   build:
@@ -28,3 +29,47 @@ jobs:
 
       - name: Test
         run: yarn test
+
+  terraform-plan:
+    name: Terraform plan
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ TERRAFORM_VERSION }}
+
+      - run: terraform init
+
+      - run: terraform fmt -check
+
+      - run: terraform validate
+
+      - name: Terraform plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+
+  deploy:
+    name: Deploy
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    concurrency: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy infrastructure changes and app
+        working-directory: infrastructure
+        run: |
+          terraform init
+          terraform apply -auto-approve
