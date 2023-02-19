@@ -44,7 +44,7 @@ jobs:
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: ${{ TERRAFORM_VERSION }}
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
 
       - run: terraform init
 
