@@ -16,7 +16,6 @@ env:
   TERRAFORM_VERSION: 1.3.9
   TERRAFORM_WORKING_DIRECTORY: terraform
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
 
 jobs:
   build:
