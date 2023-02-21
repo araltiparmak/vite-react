@@ -47,6 +47,13 @@ jobs:
           name: dist
           path: ${{ env.PACKAGE_PATH }}/dist
 
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHub-OIDC-TERRAFORM
+
       - name: Deploy app to S3
         run: aws s3 sync public/ s3://${{ env.BUCKET_NAME }}/deploy --delete --region ${{ secrets.AWS_REGION }}
 
