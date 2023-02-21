@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "vite-react-project"
-    key    = "tf-state/vite-react.tfstate"
+    bucket = "my-infra"
+    key    = "vite-react.tfstate"
     region = "eu-central-1"
   }
   required_version = ">= 1.3.0"
@@ -21,4 +21,8 @@ provider "aws" {
       Repo      = "vite-react"
     }
   }
+}
+
+variable "domain_name" {
+  type = string
 }
