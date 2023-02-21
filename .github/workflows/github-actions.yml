@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: dist
-          path: ${{ env.PACKAGE_PATH }}/dist
+          path: dist
 
   terraform-plan:
     name: Terraform plan
@@ -130,6 +130,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Deploy infrastructure changes and app
         working-directory: ${{ env.TERRAFORM_WORKING_DIRECTORY }}
         run: |
@@ -139,14 +145,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: build
-          path: build
-
-      - name: Configure AWS credentials from AWS account
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          name: dist
+          path: dist
 
       - name: Deploy app to S3
         run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
