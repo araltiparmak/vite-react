@@ -44,6 +44,9 @@ jobs:
           name: build
           path: ${{ env.PACKAGE_PATH }}/build
 
+      - name: Deploy app to S3
+        run: aws s3 sync ./dist/ s3://${{ env.BUCKET_NAME }} --delete
+
   terraform-plan:
     name: Terraform plan
     if: github.event_name == 'pull_request'
