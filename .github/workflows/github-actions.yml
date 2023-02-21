@@ -122,7 +122,7 @@ jobs:
 
   deploy:
     name: Deploy
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs: build
     concurrency: deploy
     runs-on: ubuntu-latest
