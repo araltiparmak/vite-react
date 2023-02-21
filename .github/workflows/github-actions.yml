@@ -47,15 +47,6 @@ jobs:
           name: dist
           path: ${{ env.PACKAGE_PATH }}/dist
 
-      - name: Configure AWS credentials from AWS account
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Deploy app to S3
-        run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
-
   terraform-plan:
     name: Terraform plan
     if: github.event_name == 'pull_request'
@@ -151,7 +142,11 @@ jobs:
           name: build
           path: build
 
-      - name: Deploy app to S3
-        env:
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy app to S3
         run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
