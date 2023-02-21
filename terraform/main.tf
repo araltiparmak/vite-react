@@ -10,7 +10,7 @@ resource "aws_s3_bucket_versioning" "vite_react_project_versioning" {
 }
 
 resource "aws_s3_object" "deploy" {
-  key    = "deploy"
   bucket = aws_s3_bucket.vite_react_project.id
+  key    = "deploy/"
   acl    = "private"
 }

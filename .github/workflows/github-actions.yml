@@ -15,6 +15,7 @@ env:
   NODE_VERSION: 18
   TERRAFORM_VERSION: 1.3.9
   TERRAFORM_WORKING_DIRECTORY: terraform
+  BUCKET_NAME: vite-react-project
 
 jobs:
   build:
@@ -36,6 +37,15 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: Build
+        run: yarn build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ${{ env.PACKAGE_PATH }}/dist
 
   terraform-plan:
     name: Terraform plan
@@ -125,3 +135,18 @@ jobs:
         run: |
           terraform init
           terraform apply -auto-approve
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy app to S3
+        run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
