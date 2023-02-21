@@ -149,4 +149,4 @@ jobs:
           path: dist
 
       - name: Deploy app to S3
-        run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
+        run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }} --delete
