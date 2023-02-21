@@ -38,11 +38,14 @@ jobs:
       - name: Test
         run: yarn test
 
+      - name: Build
+        run: yarn build
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: build
-          path: ${{ env.PACKAGE_PATH }}/build
+          name: dist
+          path: ${{ env.PACKAGE_PATH }}/dist
 
       - name: Deploy app to S3
         run: aws s3 sync public/ s3://${{ env.BUCKET_NAME }}/deploy --delete --region ${{ secrets.AWS_REGION }}
@@ -143,4 +146,6 @@ jobs:
           path: build
 
       - name: Deploy app to S3
+        env:
+          aws-region: ${{ secrets.AWS_REGION }}
         run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete
