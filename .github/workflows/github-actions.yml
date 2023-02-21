@@ -45,7 +45,7 @@ jobs:
           path: ${{ env.PACKAGE_PATH }}/build
 
       - name: Deploy app to S3
-        run: aws s3 sync dist/ s3://${{ env.BUCKET_NAME }}/deploy --delete --region ${{ secrets.AWS_REGION }}
+        run: aws s3 sync public/ s3://${{ env.BUCKET_NAME }}/deploy --delete --region ${{ secrets.AWS_REGION }}
 
   terraform-plan:
     name: Terraform plan
