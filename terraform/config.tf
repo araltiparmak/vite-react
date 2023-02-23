@@ -6,8 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-
-    bucket =  "my-infra"
+    bucket = "my-infra"
     key    = "vite-react.tfstate"
     region = "eu-central-1"
   }
