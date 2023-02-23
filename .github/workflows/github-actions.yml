@@ -70,7 +70,7 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-      - run: terraform fmt -check
+      - run: terraform fmt -recursive -check
 
       - run: terraform init
 
