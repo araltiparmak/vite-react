@@ -1,6 +1,7 @@
 data "aws_iam_policy_document" "website_iam_policy" {
   statement {
-    actions = [
+    actions =   [
+
       "s3:GetObject"
     ]
     principals {
